@@ -1,0 +1,24 @@
+# Déploiement du dashboard admin HoopCI (dépôt autonome) sur Netlify.
+# L'API par défaut est https://hoopci-3.onrender.com (voir src/api.js) ;
+# pour cibler une autre API, définir VITE_API_URL dans les variables Netlify.
+
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA : toutes les routes internes retombent sur index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# En-têtes de sécurité (back-office sensible)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"
